@@ -6,6 +6,5 @@ class CreateMotorbikes < ActiveRecord::Migration
     end
     
     add_foreign_key :motorbikes, :vehicles
-    add_foreign_key :cars, :vehicles
   end
 end

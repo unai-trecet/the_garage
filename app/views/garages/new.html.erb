@@ -1,0 +1,5 @@
+<%= form_for @garage, url: {action: "create"}, html: {class: "nifty_form"} do |f| %>
+  <%= f.integer :levels, label: "Number of levels" %>
+  <%= f.integer :lots, label: "Number of lots per level" %>
+  <%= f.submit "Create" %>
+<% end %>

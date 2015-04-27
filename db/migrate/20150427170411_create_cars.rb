@@ -4,5 +4,7 @@ class CreateCars < ActiveRecord::Migration
       t.references :vehicles, index:true
       t.timestamps
     end
+
+    add_foreign_key :cars, :vehicles
   end
 end
