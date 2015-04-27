@@ -11,10 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427163248) do
+ActiveRecord::Schema.define(version: 20150427170854) do
+
+  create_table "cars", force: :cascade do |t|
+    t.integer  "vehicles_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cars", ["vehicles_id"], name: "index_cars_on_vehicles_id"
+
+  create_table "motorbikes", force: :cascade do |t|
+    t.integer "vehicles_id"
+  end
+
+  add_index "motorbikes", ["vehicles_id"], name: "index_motorbikes_on_vehicles_id"
 
   create_table "vehicles", force: :cascade do |t|
-    t.integer "plate"
+    t.integer  "plate"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "vehicles", ["plate"], name: "index_vehicles_on_plate"
