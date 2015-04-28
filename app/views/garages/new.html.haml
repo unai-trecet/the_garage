@@ -1,5 +1,13 @@
-<%= form_for @article, url: {action: "create"}, html: {class: "nifty_form"} do |f| %>
-  <%= f.text_field :title %>
-  <%= f.text_area :body, size: "60x12" %>
-  <%= f.submit "Create" %>
-<% end %>
+%section.register.container
+  .row
+    .col-sm-10.col-sm-offset-1
+      = bootstrap_form_for @garage, html: { class: "form-horizontal" } do |f|
+        %header
+          %h1 Wellcome to the Garage simulator!! Please, create new garage
+        %fieldset
+          = f.integer :leves, label: "Number of levels"        
+          = f.integer :leves, label: "Number of slots per level"     
+
+        %fieldset.actions.control-group.col-sm-offset-2
+          .controls
+            %input(type="submit" value="Sign Up" class="btn btn-default")

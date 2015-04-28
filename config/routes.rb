@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'garages#new'
 
-  resources :garages, only: [:new, :create]
+  resources :garages, only: [:new, :create, :show]
  
 end
