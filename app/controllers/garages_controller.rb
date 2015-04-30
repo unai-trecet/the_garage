@@ -9,7 +9,6 @@ class GaragesController < ApplicationController
   end
 
   def create
-
     @garage = Garage.new(garage_params)
 
     if @garage.save 
@@ -21,8 +20,7 @@ class GaragesController < ApplicationController
     end
   end
 
-  def park_vehicle 
-    
+  def park_vehicle     
     @garage = Garage.find(params[:garage_id])
 
     if params[:park_button]
