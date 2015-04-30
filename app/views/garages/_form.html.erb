@@ -1,0 +1,20 @@
+<%= form_tag parking_vehicle_path, method: "post" do %>
+  <%= hidden_field_tag :garage_id, value: @garage.id %>
+  <%= label_tag("License plate") %>
+  <br>
+  <%= text_field_tag(:plate) %>
+  <br>
+  <br>
+  <%= label_tag("Car") %>
+  <br>
+  <%= radio_button_tag(:type, "car") %>
+  <br>
+  <%= label_tag("Motorbyke") %>
+  <br>
+  <%= radio_button_tag(:type, "motorbyke") %>
+  <br>
+  <br>
+
+  <%= submit_tag("Park vehicle") %>
+  
+<% end %>

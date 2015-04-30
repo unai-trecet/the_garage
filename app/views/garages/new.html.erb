@@ -1,13 +1,14 @@
-<%= form_for @garage, url: {action: "create"}, html: {class: "nifty_form"} do |f| %>
+<%= form_for @garage do |f| %>
   <%= f.label "Number of levels" %>
   <br>
-  <%= f.text_field :levels %>
+  <%= f.number_field :number_levels %>
   <br>
   <br>
   <%= f.label "Number of lots per level" %>
   <br>
-  <%= f.text_field :lots %>
+  <%= f.number_field :number_lots %>
   <br>
   <br>
   <%= f.submit "Create" %>  
 <% end %>
+
