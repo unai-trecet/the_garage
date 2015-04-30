@@ -79,7 +79,7 @@ describe GaragesController do
 
           it "associates the vehicle to a lot" do
             post :park_vehicle, plate: "7777", type: "car", garage_id: garage.id, park_button: "Park vehicle" 
-            expect(garage.levels.last.vehicles.last).to eq(Vehicle.last)
+            expect(Lot.where(vehicle_id: Vehicle.last.id).first.vehicle).to eq(Vehicle.last)
           end
         end
 
@@ -124,12 +124,8 @@ describe GaragesController do
             expect(Vehicle.count).to eq(2)
           end
 
-          it "destroys the associated lot" do
-            expect(Lot.count).to eq(0)
-          end
-
-          it "destroys the associated level if it is no need any more" do
-            expect(garage.levels.count).to eq(1)            
+          it "sets lot's vehicle_id to nil" do
+            expect(Lot.last.vehicle).to be_nil
           end
 
           it "Updates garage's number of vehicles" do
@@ -147,10 +143,6 @@ describe GaragesController do
 
           it "does not destroy any vehicle" do
             expect(Vehicle.count).to eq(3)
-          end
-
-          it "does not destroy any lot" do
-            expect(Lot.count).to eq(1)
           end
 
           it "does not update garage's number of vehicles" do

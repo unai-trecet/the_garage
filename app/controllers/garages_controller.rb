@@ -79,13 +79,15 @@ class GaragesController < ApplicationController
       garage.levels.create(number: level_number)
     end
 
-    lot_number = if Lot.count == 0 
-                   1
-                 else
-                   Lot.last.number + 1 
-                 end 
-
-    lot = Lot.create(garage_id: garage.id, vehicle_id: vehicle.id, level_id: garage.levels.last.id, number: lot_number)    
+    if garage.lots.count == 0
+      lot = Lot.create(garage_id: garage.id, vehicle_id: vehicle.id, level_id: garage.levels.last.id, number: 1)    
+    elsif garage.lots.where(vehicle_id: nil).count > 0
+      lot = garage.lots.where(vehicle_id: nil).first
+      lot.update_attributes(vehicle_id: vehicle.id)      
+    else
+      lot =Lot.create(garage_id: garage.id, vehicle_id: vehicle.id, level_id: garage.levels.last.id, number: garage.lots.last.number + 1)
+    end
+   
     vehicle.update_attributes(garage_id: garage.id, lot_id: lot.id, level_id: garage.levels.last.id)
     
     flash[:error] = "The vehicle has been succesfully parked in level: #{ vehicle.level.number }, lot: #{ vehicle.lot.number }."  
@@ -96,13 +98,9 @@ class GaragesController < ApplicationController
 
     if vehicle
       lot = Lot.find_by(vehicle_id: vehicle.id)
-      lot.destroy
+      lot.update_attributes(vehicle_id: nil)
 
-      vehicle.destroy
-
-      if garage.delete_level?
-        garage.levels.last.delete
-      end        
+      vehicle.delete
 
       flash[:notice] = "The #{ params[:type] } with plate: #{ params[:plate] }, has left the garage"
     else
