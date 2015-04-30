@@ -24,31 +24,65 @@ class GaragesController < ApplicationController
   def park_vehicle 
     
     @garage = Garage.find(params[:garage_id])
-   
-   
-    if @garage.has_empty_lot?
-      
-      @vehicle = new_vehicle_of_type
 
-      if @vehicle.save 
-        if @garage.create_new_level?
-          @garage.levels.create()
+    if params[:park_button]
+
+      if @garage.has_empty_lot?
+        
+        @vehicle = new_vehicle_of_type
+
+        if @vehicle.save 
+          if @garage.create_new_level?
+            @garage.levels.create()
+          end
+
+          @lot = Lot.create(garage_id: @garage.id, vehicle_id: @vehicle.id, level_id: @garage.levels.last.id)
+          @vehicle.update_attributes(garage_id: @garage.id, lot_id: @lot.id, level_id: @garage.levels.last.id)
+          
+          flash[:error] = "The vehicle has been succesfully parked in level: #{ @vehicle.level.id }, lot: #{ @vehicle.lot.id }."
+        else
+          flash[:error] = "Vehicle cannot be parked because: #{ @vehicle.errors.full_messages }" 
         end
 
-        @lot = Lot.create(garage_id: @garage.id, vehicle_id: @vehicle.id, level_id: @garage.levels.last.id)
-        @vehicle.update_attributes(garage_id: @garage.id, lot_id: @lot.id, level_id: @garage.levels.last.id)
-        
-        flash[:error] = "The #{ params[:type] } has been succesfully parked in level: #{ @vehicle.level.id }, lot: #{ @vehicle.lot.id }."
       else
-        flash[:error] = "Vehicle cannot be parked because: #{ @vehicle.errors.full_messages }" 
+        flash[:error] = "There is no room for this vehicle. Sorry." 
       end
 
-    else
-      flash[:error] = "There is no room for this vehicle. Sorry." 
+    elsif params[:unpark_button]
+      
+      @vehicle = Vehicle.find_by(plate: params[:plate])
+
+      if @vehicle
+        lot = Lot.find_by(vehicle_id: @vehicle.id)
+        lot.destroy
+
+        @vehicle.destroy
+
+        if @garage.delete_level?
+          @garage.levels.last.delete
+        end        
+
+        flash[:notice] = "The #{ params[:type] } with plate: #{ params[:plate] }, has left the garage"
+      else
+        flash[:error] = "There is no vehicle in this garage with the submited plate: #{ params[:plate] }"
+      end
     end
 
-    render :show   
+    redirect_to garage_path @garage.id   
   end  
+
+  def find_vehicle
+    @garage = Garage.find(params[:garage_id])
+    @vehicle = Vehicle.find_by(plate: params[:plate])
+    
+    if @vehicle
+      flash[:notice] = "The vehicle with plate #{ @vehicle.plate }, is in level: #{ @vehicle.level.id }, lot: #{ @vehicle.lot.id }"
+    else
+      flash[:error] = "There is no vehicle in this garage with the submited plate: #{ params[:plate] }"
+    end  
+
+    redirect_to garage_path @garage.id  
+  end
 
   private
 

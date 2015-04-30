@@ -1,3 +1,5 @@
+<br>
+<p><h4> Please type the plate of the vehicle and the button with the option you want.</h4></p>
 <%= form_tag parking_vehicle_path, method: "post" do %>
 
   <%= hidden_field_tag :garage_id, @garage.id %>
@@ -16,18 +18,31 @@
   <br>
   <br>
 
-  <%= submit_tag("Park vehicle"), name: "park_button" %>
-  <%= submit_tag("Unpark a vehicle"), name: "unpark_button" %>
+  <%= submit_tag("Park vehicle", name: "park_button") %>
+  <%= submit_tag("Unpark a vehicle", name: "unpark_button") %>
   
 <% end %>
 
 
 <p>
   <div> 
-    <%= "The parking has #{ @garage.vehicles.count } vehicles, parked. There are: #{ @garage.number_of_empty_lots } lots available." 
+    <%= "The parking has #{ @garage.vehicles.count } vehicles, parked. There are: #{ @garage.number_of_empty_lots } lots available. #{ Car.count } cars and #{ Motorbike.count } motorbikes." 
     %>
   </div>
 <p/>
+
+<%= form_tag find_vehicle_path, method: "post" do %>
+
+  <%= hidden_field_tag :garage_id, @garage.id %>
+  <%= label_tag("License plate") %>
+  <br>
+  <%= text_field_tag(:plate) %>
+  <br>
+  <br>
+
+  <%= submit_tag("Find vehicle") %>
+ 
+<% end %>
 
 
 
