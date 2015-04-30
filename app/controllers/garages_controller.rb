@@ -13,7 +13,7 @@ class GaragesController < ApplicationController
     @garage = Garage.new(garage_params)
 
     if @garage.save 
-      @garage.levels.create()
+      @garage.levels.create(number: 1)
       redirect_to garage_path(@garage.id)
     else
       flash[:error] = "The garage could not be created because of: #{ @garage.errors.full_messages }"
@@ -32,14 +32,23 @@ class GaragesController < ApplicationController
         @vehicle = new_vehicle_of_type
 
         if @vehicle.save 
+
           if @garage.create_new_level?
-            @garage.levels.create()
+            level_number = @garage.levels.last.number + 1
+            @garage.levels.create(number: level_number)
           end
 
-          @lot = Lot.create(garage_id: @garage.id, vehicle_id: @vehicle.id, level_id: @garage.levels.last.id)
+          lot_number = if Lot.count == 0 
+                         1
+                       else
+                         Lot.last.number + 1 
+                       end 
+
+          @lot = Lot.create(garage_id: @garage.id, vehicle_id: @vehicle.id, level_id: @garage.levels.last.id, number: lot_number)
+          
           @vehicle.update_attributes(garage_id: @garage.id, lot_id: @lot.id, level_id: @garage.levels.last.id)
           
-          flash[:error] = "The vehicle has been succesfully parked in level: #{ @vehicle.level.id }, lot: #{ @vehicle.lot.id }."
+          flash[:error] = "The vehicle has been succesfully parked in level: #{ @vehicle.level.number }, lot: #{ @vehicle.lot.number }."
         else
           flash[:error] = "Vehicle cannot be parked because: #{ @vehicle.errors.full_messages }" 
         end
@@ -76,7 +85,7 @@ class GaragesController < ApplicationController
     @vehicle = Vehicle.find_by(plate: params[:plate])
     
     if @vehicle
-      flash[:notice] = "The vehicle with plate #{ @vehicle.plate }, is in level: #{ @vehicle.level.id }, lot: #{ @vehicle.lot.id }"
+      flash[:notice] = "The vehicle with plate #{ @vehicle.plate }, is in level: #{ @vehicle.level.number }, lot: #{ @vehicle.lot.number }"
     else
       flash[:error] = "There is no vehicle in this garage with the submited plate: #{ params[:plate] }"
     end  

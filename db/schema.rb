@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150429162857) do
+ActiveRecord::Schema.define(version: 20150430160159) do
 
   create_table "cars", force: :cascade do |t|
     t.integer  "vehicles_id"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20150429162857) do
     t.integer  "garage_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "number"
   end
 
   add_index "levels", ["garage_id"], name: "index_levels_on_garage_id"
@@ -42,6 +43,7 @@ ActiveRecord::Schema.define(version: 20150429162857) do
     t.integer  "vehicle_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "number"
   end
 
   add_index "lots", ["garage_id"], name: "index_lots_on_garage_id"
