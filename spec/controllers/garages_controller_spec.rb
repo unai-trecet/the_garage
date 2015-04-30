@@ -48,7 +48,7 @@ describe GaragesController do
 
           let(:garage) { Fabricate :garage, number_levels: 2, number_lots: 1  }
 
-          before { garage.levels.create() }
+          before { garage.levels.create(number: 1) }
 
           it "creates a new vehicle" do      
             post :park_vehicle, plate: "7777", type: "car", garage_id: garage.id, park_button: "Park vehicle"     
@@ -87,7 +87,7 @@ describe GaragesController do
 
           let(:garage) { Fabricate :garage, number_levels: 1, number_lots: 1 }
           
-          before { garage.levels.create() }
+          before { garage.levels.create(number: 1) }
 
           it "does not create a vehicle" do     
             garage.vehicles.create(plate: '1234')
@@ -104,7 +104,7 @@ describe GaragesController do
         let(:car) { Fabricate :vehicle }
 
         before do 
-          garage.levels.create() 
+          garage.levels.create(number: 1) 
 
           car2 = Fabricate :vehicle
           car3 = Fabricate :vehicle

@@ -38,7 +38,7 @@ class GaragesController < ApplicationController
       else
         flash[:error] = "There is no room for this vehicle. Sorry." 
       end
-      
+
     elsif params[:unpark_button]
       unpark_vehicle params, @garage
     end
